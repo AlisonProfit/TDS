@@ -92,17 +92,18 @@ class Encoding:
         specto = spectrogram(s, fs, window = self.window, noverlap=32)
         f, t, Sxx = specto
         peak = peak_local_max(Sxx, min_distance= 10)
+        self.peak = peak
+        self.specto = specto
         return (specto, peak)
 
 
-    def display_spectrogram(self):
+    def display_spectrogram(self, fs, s):
 
         """
         Display the spectrogram of the audio signal
         """
-
-        fs, song = read(self)
-        f, t, Sxx = spectrogram(song, fs, nperseg = 128, noverlap = 32)
+        specto = spectrogram(s, fs, window = self.window, noverlap=32)
+        f, t, Sxx = self.specto
         plt.pcolormesh(t, f, Sxx, shading='gouraud')
         plt.ylabel('Frequency (Hz)')
         plt.xlabel('Time (sec)')
