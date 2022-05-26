@@ -91,7 +91,7 @@ class Encoding:
         # Insert code here
         specto = spectrogram(s, fs, window = self.window, noverlap=32)
         f, t, Sxx = specto
-        peak = peak_local_max(Sxx, min_distance= 10)
+        peak = peak_local_max(Sxx, min_distance= 1000, exclude_border=False)
         self.peak = peak
         self.specto = specto
         return (specto, peak)
