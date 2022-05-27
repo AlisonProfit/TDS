@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 
 from scipy.io.wavfile import read
 from algorithm import *
+import scipy.signal
 
 
 # ----------------------------------------------
@@ -27,11 +28,18 @@ if __name__ == '__main__':
     audiofiles = [item for item in audiofiles if item[-4:] =='.wav']
 
     # 2: Set the parameters of the encoder
-    # Insert your code here
-
+    size = 128
+    noverlap = 32
+    window = scipy.signal.get_window("boxcar", size, fftbins=True)
     # 3: Construct the database
     database = []
+
     # Insert your code here
+    for name in audiofiles:
+        fs, s = read("samples\Frisk - Au.Ra.wav")
+        fingerprint = Encoding(window, size)
+        hashes = fingerprint.process(fs, s)
+        database.append({'song': name, 'hashcodes': hashes})
 
     # 4: Save the database
     with open('songs.pickle', 'wb') as handle:
