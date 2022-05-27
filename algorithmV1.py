@@ -86,17 +86,17 @@ class Encoding:
         """
 
         self.fs = fs
-        self.s = 
+        self.s = s
 
         # Insert code here
         spectro = spectrogram(s, fs, window = self.window, noverlap=32)
         f, t, Sxx = spectro
-        peak = peak_local_max(Sxx, min_distance= 10)
+        peak = peak_local_max(Sxx, min_distance= 1000, exclude_border=False)
         self.peak = peak
         self.spectro = spectro
 
 
-        
+
         hashes = {}
         for anchor in anchors:
            hashe
