@@ -51,7 +51,7 @@ class Encoding:
         self.window_size = window_size
 
 
-    def process(self, fs, s):
+    def process(self, fs, s, anchors):
 
         """
 
@@ -86,15 +86,24 @@ class Encoding:
         """
 
         self.fs = fs
-        self.s = s
+        self.s = 
 
         # Insert code here
-        specto = spectrogram(s, fs, window = self.window, noverlap=32)
-        f, t, Sxx = specto
+        spectro = spectrogram(s, fs, window = self.window, noverlap=32)
+        f, t, Sxx = spectro
         peak = peak_local_max(Sxx, min_distance= 10)
         self.peak = peak
-        self.specto = specto
-        return (specto, peak)
+        self.spectro = spectro
+
+
+        
+        hashes = {}
+        for anchor in anchors:
+           hashe
+
+
+
+        return (spectro, peak)
 
 
     def display_spectrogram(self, fs, s):
