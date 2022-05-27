@@ -1,4 +1,4 @@
-from algorithmV1 import Encoding
+from algorithm import Encoding
 
 import pickle
 import numpy as np
