@@ -16,9 +16,10 @@ noverlap = 32
 window = scipy.signal.get_window("boxcar", size, fftbins=True)
 
 fingerprint = Encoding(window, size)
-spectro, peak = fingerprint.process(fs, s)
+hashes = fingerprint.process(fs, s)
 
-fingerprint.display_spectrogram(fs ,s)
+print(hashes)
+# fingerprint.display_spectrogram(fs ,s)
 
 # plt.scatter(peak[:, 0], peak[:, 1], s = 5)
 # plt.show()
