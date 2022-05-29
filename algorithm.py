@@ -4,10 +4,12 @@ Algorithm implementation
 import pickle
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors
 
 from scipy.io.wavfile import read
 from scipy.signal import spectrogram
 from skimage.feature import peak_local_max
+import scipy.signal
 
 # ----------------------------------------------------------------------------
 # Create a fingerprint for an audio file based on a set of hashes
@@ -27,7 +29,7 @@ class Encoding:
 
     """
 
-    def __init__(self, window, window_size):
+    def __init__(self, window = scipy.signal.get_window("boxcar", 128, fftbins=True), window_size = 128):
 
         """
         Class constructor
@@ -89,7 +91,8 @@ class Encoding:
         self.s = s
 
         # Insert code here
-        spectro = spectrogram(s, fs, window = self.window, noverlap=32)
+      #   spectro = spectrogram(s, fs, window = self.window, noverlap=32)
+        spectro = spectrogram(s, fs, noverlap=32)
         f, t, Sxx = spectro
         peak = peak_local_max(Sxx, min_distance= 1000, exclude_border=False)
         self.anchors = peak
@@ -105,16 +108,17 @@ class Encoding:
         return hashes
 
 
-    def display_spectrogram(self, fs, s):
+    def display_spectrogram(self):
 
         """
         Display the spectrogram of the audio signal
         """
-        specto = spectrogram(s, fs, window = self.window, noverlap=32)
-        f, t, Sxx = self.specto
-        plt.pcolormesh(t, f, Sxx, shading='gouraud')
+        
+        f, t, Sxx = self.spectro
+        plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm())
         plt.ylabel('Frequency (Hz)')
         plt.xlabel('Time (sec)')
+        plt.colorbar()
         plt.show()
 
 

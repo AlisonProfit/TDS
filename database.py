@@ -30,14 +30,14 @@ if __name__ == '__main__':
     # 2: Set the parameters of the encoder
     size = 128
     noverlap = 32
-    window = scipy.signal.get_window("boxcar", size, fftbins=True)
+
     # 3: Construct the database
     database = []
 
     # Insert your code here
     for name in audiofiles:
-        fs, s = read("samples\Frisk - Au.Ra.wav")
-        fingerprint = Encoding(window, size)
+        fs, s = read("samples\\" + name)
+        fingerprint = Encoding()
         hashes = fingerprint.process(fs, s)
         database.append({'song': name, 'hashcodes': hashes})
 

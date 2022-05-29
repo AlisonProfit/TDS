@@ -9,17 +9,16 @@ from scipy.signal import spectrogram
 import scipy.signal
 #rom skimage.feature import peak_local_max
 
-fs, s = read("samples\Frisk - Au.Ra.wav")
+fs, s = read("samples\Cash Machine - Anno Domini Beats.wav")
 size = 128
 noverlap = 32
 # nperseg si la fenêtre n'a pas directement la bonne taille
-window = scipy.signal.get_window("boxcar", size, fftbins=True)
 
-fingerprint = Encoding(window, size)
+fingerprint = Encoding()
 hashes = fingerprint.process(fs, s)
 
-print(hashes)
+# fingerprint.display_spectrogram()
 # fingerprint.display_spectrogram(fs ,s)
 
-# plt.scatter(peak[:, 0], peak[:, 1], s = 5)
-# plt.show()
+plt.scatter(fingerprint.anchors[:, 0], fingerprint.anchors[:, 1], s = 5)
+plt.show()
