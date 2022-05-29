@@ -17,8 +17,8 @@ noverlap = 32
 fingerprint = Encoding()
 hashes = fingerprint.process(fs, s)
 
-# fingerprint.display_spectrogram()
-# fingerprint.display_spectrogram(fs ,s)
+fingerprint.display_spectrogram()
+#fingerprint.display_spectrogram(fs ,s)
 
-plt.scatter(fingerprint.anchors[:, 0], fingerprint.anchors[:, 1], s = 5)
+#plt.scatter(fingerprint.anchors[:, 0], fingerprint.anchors[:, 1], s = 5)
 plt.show()
