@@ -112,17 +112,26 @@ class Encoding:
         return hashes
 
 
-    def display_spectrogram(self):
+    def display_spectrogram(self,display_anchors=True):
 
         """
         Display the spectrogram of the audio signal
         """
         
         f, t, Sxx = self.spectro
-        plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm())
+
+        plt.figure()
+
+        plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm(), shading = 'gouraud')
+        plt.colorbar()
+
+
+        if display_anchors:
+           plt.scatter(self.anchors[0],self.anchors[1], color = 'r')
+
         plt.ylabel('Frequency (Hz)')
         plt.xlabel('Time (sec)')
-        plt.colorbar()
+
         plt.show()
 
 
