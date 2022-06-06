@@ -198,14 +198,13 @@ class Matching:
 
         # Insert code here
 
-        match = []
+        matching = []
         for h in self.hashes1:
            for k in self.hashes2:
               if h["hash"] == k["hash"] :
-                 match.append(h["t"])
+                 matching.append([h["t"],k["t"]])
          
-        self.matching = match
-        
+        self.matching = matching
 
              
     def display_scatterplot(self):
@@ -215,8 +214,8 @@ class Matching:
         that match
         """
 
-        x = self.match[:,0]
-        y = self.match[:,1]
+        x = self.matching[:,0]
+        y = self.matching[:,1]
 
         plt.scatter(x,y)
         plt.show()
@@ -229,14 +228,12 @@ class Matching:
         """
 
         # Insert code here
-      
-        fs, song = read(self)
-        f, t, Sxx = spectrogram(song, fs, nperseg = 128, noverlap = 32)
-        plt.pcolormesh(t, f, Sxx, shading='gouraud')
-        plt.ylabel('Frequency (Hz)')
-        plt.xlabel('Time (sec)')
-        plt.show()
 
+        x = self.matching[:,0]
+        y = self.matching[:,1]
+
+        plt.hist(x,y)
+        plt.show()
 
 # ----------------------------------------------
 # Run the script
@@ -244,7 +241,7 @@ class Matching:
 if __name__ == '__main__':
 
     encoder = Encoding()
-    fs, s = read('./samples/Snoop Dogg - Who Am I.wav')
+    fs, s = read('./samples/Late truth - Audio Hertz.wav')
     encoder.process(fs, s[:900000])
     encoder.display_spectrogram(display_anchors=True)
 

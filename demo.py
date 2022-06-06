@@ -40,14 +40,15 @@ if __name__ == '__main__':
     # fingerprints in the database
 
     # Insert code here
-    print(hashes) 
+    
+    #print(hashes) 
 
     hashes1 = encoder.process(fs, s)
-    
 
-    print(hashes1)
+    #print(hashes1)
 
     match = Matching(hashes,hashes1)
+    match.display_histogram()
     print(match.matching)
 
 
