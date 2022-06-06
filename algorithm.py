@@ -94,9 +94,10 @@ class Encoding:
       #   spectro = spectrogram(s, fs, window = self.window, noverlap=32)
         spectro = spectrogram(s, fs, noverlap=32)
         f, t, Sxx = spectro
-        Sxx = Sxx[f<20000, :]
-        f = f[f<20000]
-        peak = peak_local_max(Sxx, min_distance= 100, exclude_border=False)
+      #   Sxx = Sxx[f<20000, :]
+      #   f = f[f<20000]
+        peak = peak_local_max(Sxx, min_distance= 1000, exclude_border=False)
+      #   print(t.shape)
       #   print(peak.shape)
       #   print(peak)
         self.anchors = peak
@@ -105,8 +106,8 @@ class Encoding:
         hashes = []
         for anchor in self.anchors:
            for peak in self.anchors:
-              if abs(anchor[1] - peak[1]) < deltaT and abs(anchor[0] - peak[0]) < deltaF:
-                 hashes.append({"t" : anchor[1], "hash" : (peak[1] - anchor[1], anchor[0], peak[0])})
+              if abs(t[anchor[1]] - t[peak[1]]) < deltaT and abs(f[anchor[0]] - f[peak[0]]) < deltaF:
+                 hashes.append({"t" : t[anchor[1]], "hash" : (t[peak[1]] - t[anchor[1]], f[anchor[0]], f[peak[0]])})
         self.hashes = hashes 
 
         return hashes
@@ -120,6 +121,7 @@ class Encoding:
         
         f, t, Sxx = self.spectro
         plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm())
+      #   plt.plot(t[self.anchors[1]], f[self.anchors[0]])
         plt.ylabel('Frequency (Hz)')
         plt.xlabel('Time (sec)')
         plt.colorbar()

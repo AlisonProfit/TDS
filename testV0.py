@@ -22,12 +22,11 @@ fingerprint2 = Encoding()
 hashes1 = fingerprint1.process(fs, s)
 hashes2 = fingerprint2.process(fs2,s2)
 
-match = Matching(hashes1,hashes2)
+# match = Matching(hashes1,hashes2)
 
-print(match.compare())
+# print(match.compare())
 
-# fingerprint.display_spectrogram()
+fingerprint1.display_spectrogram()
 # fingerprint.display_spectrogram(fs ,s)
 
 #plt.scatter(fingerprint.anchors[:, 0], fingerprint.anchors[:, 1], s = 5)
-plt.show()
