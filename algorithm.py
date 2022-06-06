@@ -53,7 +53,7 @@ class Encoding:
         self.window_size = window_size
 
 
-    def process(self, fs, s, deltaT = 10, deltaF = 1000):
+    def process(self, fs, s, deltaT = 1000, deltaF = 10000):
 
         """
 
@@ -94,15 +94,19 @@ class Encoding:
       #   spectro = spectrogram(s, fs, window = self.window, noverlap=32)
         spectro = spectrogram(s, fs, noverlap=32)
         f, t, Sxx = spectro
-        peak = peak_local_max(Sxx, min_distance= 1000, exclude_border=False)
+        Sxx = Sxx[f<20000, :]
+        f = f[f<20000]
+        peak = peak_local_max(Sxx, min_distance= 100, exclude_border=False)
+      #   print(peak.shape)
+      #   print(peak)
         self.anchors = peak
-        self.spectro = spectro
+        self.spectro = f, t, Sxx
 
         hashes = []
         for anchor in self.anchors:
            for peak in self.anchors:
-              if abs(anchor[0] - peak[0]) < deltaT and abs(anchor[1] - peak[1]) < deltaF:
-                 hashes.append({"t" : anchor[0], "hash" : (peak[0] - anchor[0], anchor[1], peak[1])})
+              if abs(anchor[1] - peak[1]) < deltaT and abs(anchor[0] - peak[0]) < deltaF:
+                 hashes.append({"t" : anchor[1], "hash" : (peak[1] - anchor[1], anchor[0], peak[0])})
         self.hashes = hashes 
 
         return hashes
@@ -203,8 +207,9 @@ class Matching:
            for k in self.hashes2:
               if h["hash"] == k["hash"] :
                  matching.append([h["t"],k["t"]])
+        print(len(matching))
          
-        self.matching = matching
+        self.matching = np.array(matching)
 
              
     def display_scatterplot(self):
@@ -213,7 +218,7 @@ class Matching:
         Display through a scatterplot the times associated to the hashes
         that match
         """
-
+         
         x = self.matching[:,0]
         y = self.matching[:,1]
 
@@ -229,10 +234,11 @@ class Matching:
 
         # Insert code here
 
-        x = self.matching[:,0]
-        y = self.matching[:,1]
+        H = []
+        for k in range(len(self.matching)):
+           H.append(self.matching[k,0] - self.matching[k,1])
 
-        plt.hist(x,y)
+        plt.hist(H)
         plt.show()
 
 # ----------------------------------------------

@@ -34,22 +34,24 @@ if __name__ == '__main__':
 
     # 4: Use the encoder to extract a fingerprint of the sample
     encoder.process(fs, s[tmin:tmin + duration])
-    hashes = encoder.hashes
-
+    hashes1 = encoder.hashes
+    # plt.scatter(encoder.anchors[:, 0], encoder.anchors[:, 1])
     # 5: Using the class Matching, compare the fingerprint to all the 
     # fingerprints in the database
 
     # Insert code here
     
-    #print(hashes) 
+    # print(hashes) 
 
-    hashes1 = encoder.process(fs, s)
+    hashes2 = encoder.process(fs, s)
+    # plt.scatter(encoder.anchors[:, 0], encoder.anchors[:, 1])
+    # plt.show()
+    # print(hashes1)
 
-    #print(hashes1)
-
-    match = Matching(hashes,hashes1)
+    match = Matching(hashes2, hashes1)
     match.display_histogram()
-    print(match.matching)
+    # match.display_scatterplot()
+
 
 
 
