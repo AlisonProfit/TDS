@@ -198,6 +198,15 @@ class Matching:
 
         # Insert code here
 
+        match = []
+        for h in self.hashes1:
+           for k in self.hashes2:
+              if h["hash"] == k["hash"] :
+                 match.append(h["t"])
+         
+        self.matching = match
+        
+
              
     def display_scatterplot(self):
 
@@ -205,8 +214,12 @@ class Matching:
         Display through a scatterplot the times associated to the hashes
         that match
         """
-    
-        # Insert code here
+
+        x = self.match[:,0]
+        y = self.match[:,1]
+
+        plt.scatter(x,y)
+        plt.show()
 
 
     def display_histogram(self):

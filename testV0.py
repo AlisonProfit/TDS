@@ -1,4 +1,4 @@
-from algorithm import Encoding
+from algorithm import Encoding, Matching
 
 import pickle
 import numpy as np
@@ -10,15 +10,24 @@ import scipy.signal
 #rom skimage.feature import peak_local_max
 
 fs, s = read("samples\Cash Machine - Anno Domini Beats.wav")
+fs2,s2 = read("samples\Dark Alley Deals - Aaron Kenny.wav")
 size = 128
 noverlap = 32
 # nperseg si la fenêtre n'a pas directement la bonne taille
 
-fingerprint = Encoding()
-hashes = fingerprint.process(fs, s)
+fingerprint1 = Encoding()
+fingerprint2 = Encoding()
+
+
+hashes1 = fingerprint1.process(fs, s)
+hashes2 = fingerprint2.process(fs2,s2)
+
+match = Matching(hashes1,hashes2)
+
+print(match.compare())
 
 # fingerprint.display_spectrogram()
 # fingerprint.display_spectrogram(fs ,s)
 
-plt.scatter(fingerprint.anchors[:, 0], fingerprint.anchors[:, 1], s = 5)
+#plt.scatter(fingerprint.anchors[:, 0], fingerprint.anchors[:, 1], s = 5)
 plt.show()

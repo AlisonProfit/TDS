@@ -20,6 +20,7 @@ if __name__ == '__main__':
 
     # 2: Create an instance of the class Encoder
     # Insert code here
+    encoder = Encoding()
 
     # 3: Randomly get an extract from one of the songs of the database
     songs = [item for item in os.listdir('./samples') if item[:-4] != '.wav']
@@ -39,7 +40,15 @@ if __name__ == '__main__':
     # fingerprints in the database
 
     # Insert code here
+    print(hashes) 
 
+    hashes1 = encoder.process(fs, s)
+    
+
+    print(hashes1)
+
+    match = Matching(hashes,hashes1)
+    print(match.matching)
 
 
 
