@@ -34,16 +34,19 @@ if __name__ == '__main__':
     # 3: Construct the database
     database = []
 
+
     # Insert your code here
+    fingerprint = Encoding()
     for name in audiofiles:
         fs, s = read("samples\\" + name)
-        fingerprint = Encoding()
         hashes = fingerprint.process(fs, s)
         database.append({'song': name, 'hashcodes': hashes})
 
     # 4: Save the database
     with open('songs.pickle', 'wb') as handle:
         pickle.dump(database, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+
 
 
 

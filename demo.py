@@ -49,7 +49,7 @@ if __name__ == '__main__':
     
     fs, s = read(filename)
     hashes2 = encoder.process(fs, s)
-    plt.scatter(encoder.anchors[:, 1], encoder.anchors[:, 0])
+    # plt.scatter(encoder.anchors[:, 1], encoder.anchors[:, 0])
     plt.show()
     # print(hashes2)
 
