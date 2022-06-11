@@ -36,21 +36,27 @@ if __name__ == '__main__':
     encoder.process(fs, s[tmin:tmin + duration])
     hashes1 = encoder.hashes
     # plt.scatter(encoder.anchors[:, 0], encoder.anchors[:, 1])
+
+
     # 5: Using the class Matching, compare the fingerprint to all the 
     # fingerprints in the database
 
-    # Insert code here
     
-    # print(hashes) 
 
+    # song = random.choice(songs)
+    # print('Selected song: ' + song[:-4])
+    # filename = './samples/' + song
+    
     hashes2 = encoder.process(fs, s)
-    # plt.scatter(encoder.anchors[:, 0], encoder.anchors[:, 1])
+    # plt.scatter(encoder.anchors[:, 1], encoder.anchors[:, 0])
     # plt.show()
-    # print(hashes1)
+
+    print(hashes1)
 
     match = Matching(hashes2, hashes1)
+
+    match.display_scatterplot()
     match.display_histogram()
-    # match.display_scatterplot()
 
 
 
