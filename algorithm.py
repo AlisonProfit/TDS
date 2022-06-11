@@ -49,12 +49,11 @@ class Encoding:
         All these parameters should be kept as attributes of the class.
         """
 
-        # Insert code here
         self.window = window
         self.window_size = window_size
 
 
-    def process(self, fs, s, deltaT = 1000, deltaF = 10000):
+    def process(self, fs, s, deltaT = 1000, deltaF = 50):
 
         """
 
@@ -91,50 +90,18 @@ class Encoding:
         self.fs = fs
         self.s = s
 
-        # Insert code here
-      #   spectro = spectrogram(s, fs, window = self.window, noverlap=32)
-        spectro = spectrogram(s, fs, noverlap=32)
+        spectro = spectrogram(s, fs, noverlap=32, nperseg=128)
         f, t, Sxx = spectro
-      #   Sxx = Sxx[f<20000, :]
-      #   f = f[f<20000]
-        peaks_coords = peak_local_max(Sxx, min_distance= 50, exclude_border=False)
-      #   print(t.shape)
-      #   print(peak.shape)
-      #   print(peak)
-        self.anchors = peaks_coords
+        self.spectro = spectro
+        peak = peak_local_max(Sxx, min_distance= 50, exclude_border=False)
+        self.anchors = peak
 
-        peaks_mask=np.zeros(Sxx.shape, dtype=np.int8)
-        for item in peaks_coords:
-           peaks_mask[item[0],item[1]]=int(1)
-           Sxx_with_peaks = np.ma.masked_where(peaks_mask==0, Sxx).data
-
-        constellation = peaks_coords
-         
-
-        list_constellation = constellation.tolist() #listes de couples indices
-        list_constellation.sort(key=itemgetter(1))
-
-        spectro = f, t, Sxx
-
-      #   hashes = []
-      #   for k in range(len(list_constellation)):
-      #      for i in range(len(list_constellation)):
-      #         if 0 < abs(t[anchor[1]] - t[peak[1]]) < deltaT and abs(f[anchor[0]] - f[peak[0]]) < deltaF:
-      #            hashes.append({"t" : t[anchor[1]], "hash" : (t[peak[1]] - t[anchor[1]], f[anchor[0]], f[peak[0]])})
-
-      #   self.hashes = hashes 
-
-        N_neighbors=10
-        list_hashes=[]
-        for i in range(len(list_constellation)):
-           f1 = f[list_constellation[i][0]-1]
-           T1 = t[list_constellation[i][1]-1]
-           for j in range(N_neighbors):
-              if (i + j + 1) < len(list_constellation): 
-                 f2 = f[list_constellation[i + j + 1][0]-1]
-                 T2 = t[list_constellation[i + j + 1][1]-1]
-                 list_hashes.append({"t" : T1, "hash": np.array([T2-T1,f1,f2])})
-        self.hashes=list_hashes
+        hashes = []
+        for i, anchor in enumerate(self.anchors):
+           for peak in self.anchors[i:]:
+              if (abs(anchor[1] - peak[1]) < deltaT) and (abs(anchor[0] - peak[0]) < deltaF) and (anchor[1] - peak[1] > 0):
+                 hashes.append({"t" : anchor[1], "hash" : (peak[1] - anchor[1], anchor[0], peak[0])})
+        self.hashes = hashes 
 
 
 
@@ -145,22 +112,16 @@ class Encoding:
         """
         
         f, t, Sxx = self.spectro
+        plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm(), shading = "auto")
+        plt.colorbar()
 
-        plt.figure()
+        if display_anchors :
+           plt.scatter(t[self.anchors[:, 1]], f[self.anchors[:, 0]], color = 'r')
 
-        plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm(), shading = 'gouraud')
         plt.colorbar()
         plt.ylabel('Frequency (Hz)')
         plt.xlabel('Time (sec)')
-
         plt.show()
-
-
-        if display_anchors:
-           plt.scatter(self.anchors[:,0], self.anchors[:,1], color = 'r')
-        plt.show()
-
-
 
 
 
@@ -238,32 +199,29 @@ class Matching:
         self.hashes2 = hashes2
 
         matching = []
-        offset = []
+        i=0
         for h in self.hashes1:
            for k in self.hashes2:
-              if max(abs(list(h.values())[0] - list(k.values())[0])) < 0.00001:
-                 matching.append([h["t"],k["t"]])
-                 offset.append(np.abs(h["t"]-k["t"]))
+              i+=1
+              if h["hash"] == k["hash"] :
+                  matching.append([h["t"],k["t"]])
          
-
         self.matching = np.array(matching)
-        self.offset = np.array(offset)
 
              
     def display_scatterplot(self):
 
         """
         Display through a scatterplot the times associated to the hashes
-        that match
+        that match.
         """
-         
-        x = self.matching[:,0]
-        y = self.matching[:,1]
 
-        plt.scatter(x,y)
+        print(len(self.matching[:, 1]), len(self.matching[:, 0]))
+        plt.scatter(self.matching[:, 0],self.matching[:, 1], s= 1)
         plt.xlabel("Extrait 1")
         plt.ylabel("Extrait 2")
         plt.title("Scatterplot")
+        plt.axis('equal')
         plt.show()
 
 
@@ -273,13 +231,18 @@ class Matching:
         Display the offset histogram
         """
 
-        plt.hist(self.offset)
+        H = []
+        for k in range(len(self.matching)):
+           H.append(self.matching[k,0] - self.matching[k,1])
+
+        plt.hist(H, 100)
         plt.title("Offset histogram")
         plt.show()
 
 # ----------------------------------------------
 # Run the script
 # ----------------------------------------------
+
 if __name__ == '__main__':
 
     encoder = Encoding()
