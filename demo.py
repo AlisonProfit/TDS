@@ -52,10 +52,8 @@ if __name__ == '__main__':
 
         match = Matching(hashes2, hashes1)
         match.display_scatterplot()
-        match.display_histogram()
-
-
-        #ajouter un critère
+        histO = match.display_histogram()
+        print(type(histO))
 
     
 

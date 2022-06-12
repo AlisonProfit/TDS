@@ -113,7 +113,7 @@ class Encoding:
         
         f, t, Sxx = self.spectro
         plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm(), shading = "auto")
-        plt.colorbar()
+      #   plt.colorbar()
 
         if display_anchors :
            plt.scatter(t[self.anchors[:, 1]], f[self.anchors[:, 0]], color = 'r')
@@ -199,10 +199,8 @@ class Matching:
         self.hashes2 = hashes2
 
         matching = []
-        i=0
         for h in self.hashes1:
            for k in self.hashes2:
-              i+=1
               if h["hash"] == k["hash"] :
                   matching.append([h["t"],k["t"]])
          
@@ -216,7 +214,7 @@ class Matching:
         that match.
         """
 
-        print(len(self.matching[:, 1]), len(self.matching[:, 0]))
+      #   print(len(self.matching[:, 1]), len(self.matching[:, 0]))
         plt.scatter(self.matching[:, 0],self.matching[:, 1], s= 1)
         plt.xlabel("Extrait 1")
         plt.ylabel("Extrait 2")
@@ -235,9 +233,10 @@ class Matching:
         for k in range(len(self.matching)):
            H.append(self.matching[k,0] - self.matching[k,1])
 
-        plt.hist(H, 100)
+        hist = plt.hist(H, 100)
         plt.title("Offset histogram")
         plt.show()
+        return hist
 
 # ----------------------------------------------
 # Run the script
