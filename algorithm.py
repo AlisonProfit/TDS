@@ -216,7 +216,7 @@ class Matching:
         plt.xlabel("Extrait 1")
         plt.ylabel("Extrait 2")
         plt.title("Scatterplot")
-        plt.axis('equal')
+      #   plt.axis('equal')
         plt.show()
 
 
