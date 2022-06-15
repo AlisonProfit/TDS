@@ -113,7 +113,6 @@ class Encoding:
         
         f, t, Sxx = self.spectro
         plt.pcolormesh(t, f, Sxx, norm = colors.LogNorm(), shading = "auto")
-      #   plt.colorbar()
 
         if display_anchors :
            plt.scatter(t[self.anchors[:, 1]], f[self.anchors[:, 0]], color = 'r')
@@ -213,8 +212,6 @@ class Matching:
         Display through a scatterplot the times associated to the hashes
         that match.
         """
-
-      #   print(len(self.matching[:, 1]), len(self.matching[:, 0]))
         plt.scatter(self.matching[:, 0],self.matching[:, 1], s= 1)
         plt.xlabel("Extrait 1")
         plt.ylabel("Extrait 2")
@@ -248,8 +245,3 @@ if __name__ == '__main__':
     fs, s = read('./samples/Late truth - Audio Hertz.wav')
     encoder.process(fs, s[:900000])
     encoder.display_spectrogram(display_anchors=True)
-
-
-
-
-
